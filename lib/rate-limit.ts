@@ -27,8 +27,8 @@ export interface RateLimitResult {
 
 export function checkRateLimit(
   identifier: string,
-  maxRequests: number = 5,
-  windowMs: number = 15 * 60 * 1000 // 15 minutes
+  maxRequests: number = process.env.NODE_ENV === 'development' ? 20 : 5,
+  windowMs: number = process.env.NODE_ENV === 'development' ? 1 * 60 * 1000 : 15 * 60 * 1000 // 1 min in dev, 15 min in prod
 ): RateLimitResult {
   const now = Date.now();
   const entry = rateLimitStore.get(identifier);
@@ -89,4 +89,14 @@ export function getClientIdentifier(request: Request): string {
 
   // Fallback to a default identifier (less secure but works)
   return 'unknown';
+}
+
+// Clear rate limit store (useful for development/testing)
+export function clearRateLimitStore() {
+  rateLimitStore.clear();
+}
+
+// Clear rate limit for a specific identifier (useful for development/testing)
+export function clearRateLimitForIdentifier(identifier: string) {
+  rateLimitStore.delete(identifier);
 }

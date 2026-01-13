@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { signupSchema } from '@/lib/validations';
 import { checkRateLimit, getClientIdentifier } from '@/lib/rate-limit';
+import { createApiClient } from '@/lib/supabase/api';
 
 export async function POST(request: NextRequest) {
   try {
-    // Rate limiting
+    // Rate limiting (more permissive in development)
     const identifier = getClientIdentifier(request);
-    const rateLimit = checkRateLimit(identifier, 5, 15 * 60 * 1000); // 5 requests per 15 minutes
+    const rateLimit = checkRateLimit(identifier); // Uses environment-based defaults
 
     if (!rateLimit.success) {
       return NextResponse.json(
@@ -55,12 +56,60 @@ export async function POST(request: NextRequest) {
 
     const { name, email } = validationResult.data;
 
-    // TODO: Save to database or send to email service
-    // Example:
-    // await saveToDatabase({ name, email });
-    // await sendWelcomeEmail(email, name);
+    // Detect language from request headers
+    const acceptLanguage = request.headers.get('accept-language') || '';
+    const language = acceptLanguage.toLowerCase().startsWith('pt') ? 'pt-BR' : 'en-US';
 
-    console.log('New signup:', { name, email, timestamp: new Date().toISOString() });
+    // Get client info for analytics
+    const ipAddress = getClientIdentifier(request);
+    const userAgent = request.headers.get('user-agent') || '';
+
+    // Save to Supabase (using API client without cookies)
+    const supabase = createApiClient();
+
+    const { data: signupData, error: dbError } = await supabase
+      .from('newsletter_signups')
+      .insert({
+        email,
+        name,
+        language,
+        ip_address: ipAddress,
+        user_agent: userAgent,
+        source: 'website',
+      })
+      .select()
+      .single();
+
+    if (dbError) {
+      // Check if it's a duplicate email error
+      if (dbError.code === '23505') {
+        // Unique constraint violation (duplicate email)
+        return NextResponse.json(
+          {
+            success: true,
+            message: 'You are already signed up!',
+          },
+          {
+            status: 200,
+            headers: {
+              'X-RateLimit-Limit': '5',
+              'X-RateLimit-Remaining': rateLimit.remaining.toString(),
+              'X-RateLimit-Reset': new Date(rateLimit.resetTime).toISOString(),
+            },
+          }
+        );
+      }
+
+      console.error('Database error:', dbError);
+      return NextResponse.json(
+        {
+          error: 'Failed to save signup. Please try again later.',
+        },
+        { status: 500 }
+      );
+    }
+
+    console.log('New signup saved:', { id: signupData.id, email, name, timestamp: new Date().toISOString() });
 
     return NextResponse.json(
       {
