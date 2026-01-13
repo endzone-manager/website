@@ -21,8 +21,12 @@ export const translations = {
     signUp: 'Cadastre-se',
     signUpText: 'Cadastre-se para receber atualizações sobre o desenvolvimento do projeto',
     instagram: 'Instagram',
+    contact: 'Contato',
+    contactEmail: 'redzonebossgame@gmail.com',
     comingSoon: 'Em breve',
     copyright: 'Todos os direitos reservados.',
+    gamePreview: 'Preview do Jogo',
+    gamePreviewText: 'Veja como será a experiência do Redzone Boss. Uma interface rica em dados com resultados em tempo real, estatísticas detalhadas e gestão completa de franquia.',
   },
   'en-US': {
     title: 'Redzone Boss',
@@ -43,8 +47,12 @@ export const translations = {
     signUp: 'Sign Up',
     signUpText: 'Sign up to receive updates on the project development',
     instagram: 'Instagram',
+    contact: 'Contact',
+    contactEmail: 'redzonebossgame@gmail.com',
     comingSoon: 'Coming Soon',
     copyright: 'All rights reserved.',
+    gamePreview: 'Game Preview',
+    gamePreviewText: 'See what the Redzone Boss experience will be like. A data-rich interface with real-time results, detailed statistics, and complete franchise management.',
   },
 };
 

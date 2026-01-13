@@ -1,5 +1,6 @@
 import { headers } from 'next/headers';
 import { detectLanguageFromHeaders, getTranslations } from '@/lib/i18n';
+import { SITE_CONFIG } from '@/lib/constants';
 import { Logo } from '@/components/Logo';
 
 export async function Header() {
@@ -18,7 +19,13 @@ export async function Header() {
         </div>
         <nav className="flex items-center gap-4">
           <a
-            href="https://instagram.com/redzoneboss"
+            href={`mailto:${SITE_CONFIG.email}`}
+            className="text-sm font-medium hover:underline text-muted-foreground hover:text-foreground transition-colors"
+          >
+            {t.contact}
+          </a>
+          <a
+            href={SITE_CONFIG.instagram}
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm font-medium hover:underline text-muted-foreground hover:text-foreground transition-colors"
