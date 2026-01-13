@@ -56,6 +56,26 @@ await fetch('/api/signup', {
 - [Tailwind CSS](https://tailwindcss.com/) - Estilização
 - [shadcn/ui](https://ui.shadcn.com/) - Componentes UI
 - [next-themes](https://github.com/pacocoursey/next-themes) - Gerenciamento de tema
+- [PostHog](https://posthog.com/) - Analytics e Product Analytics
+
+## 📊 PostHog Analytics
+
+O projeto está configurado com PostHog para analytics. Para ativar:
+
+1. Crie uma conta no [PostHog](https://posthog.com)
+2. Obtenha sua API Key do projeto
+3. Adicione as variáveis de ambiente:
+
+```env
+NEXT_PUBLIC_POSTHOG_KEY=phc_your_key_here
+NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+```
+
+### Eventos Rastreados
+
+- `newsletter_signup`: Disparado quando um usuário se cadastra na newsletter
+  - Propriedades: `email`, `name`, `language`, `timestamp`
+- `$pageview`: Rastreamento automático de visualizações de página
 
 ## 📄 Licença
 

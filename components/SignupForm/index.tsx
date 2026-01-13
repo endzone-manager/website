@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { usePostHog } from 'posthog-js/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -17,6 +18,7 @@ export function SignupForm({ lang }: SignupFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
+  const posthog = usePostHog();
 
   const t = getTranslations(lang);
 
@@ -75,6 +77,14 @@ export function SignupForm({ lang }: SignupFormProps) {
 
       setIsSuccess(true);
       reset();
+
+      // Track signup event in PostHog
+      posthog?.capture('newsletter_signup', {
+        email: data.email,
+        name: data.name,
+        language: lang,
+        timestamp: new Date().toISOString(),
+      });
 
       // Reset success message after 5 seconds
       setTimeout(() => {
