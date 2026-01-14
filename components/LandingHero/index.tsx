@@ -1,13 +1,22 @@
 import { headers } from 'next/headers';
 import Image from 'next/image';
-import { detectLanguageFromHeaders, getTranslations } from '@/lib/i18n';
 import { SignupForm } from '@/components/SignupForm';
-import Link from 'next/link';
+import { SITE_CONFIG } from '@/lib/constants';
+import { detectLanguageFromHeaders, getTranslations, type Language } from '@/lib/i18n';
+import { WrapperLink } from '../WrapperLink';
 
-export async function LandingHero() {
-  const headersList = await headers();
-  const lang = detectLanguageFromHeaders(headersList);
-  const t = getTranslations(lang);
+interface LandingHeroProps {
+  lang?: Language;
+}
+
+export async function LandingHero({ lang }: LandingHeroProps = {}) {
+  // If lang is not provided, detect it from headers
+  let detectedLang = lang;
+  if (!detectedLang) {
+    const headersList = await headers();
+    detectedLang = detectLanguageFromHeaders(headersList);
+  }
+  const t = getTranslations(detectedLang);
 
   return (
     <section className="container mx-auto px-4 py-20 text-center">
@@ -17,19 +26,21 @@ export async function LandingHero() {
       </p>
 
       <div className="mb-20">
-        <SignupForm lang={lang} />
+        <SignupForm lang={detectedLang} />
       </div>
 
       {/* Game Preview Section */}
       <div className="max-w-6xl mx-auto mb-20">
         <h3 className="text-3xl font-bold mb-4">{t.gamePreview}</h3>
-        <p className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto">
-          {t.gamePreviewText}
-        </p>
+        <p className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto">{t.gamePreviewText}</p>
         <div className="relative w-full rounded-xl overflow-hidden border-2 border-border shadow-2xl bg-card">
           <Image
             src="/game-preview.jpg"
-            alt={lang === 'pt-BR' ? 'Preview do jogo Redzone Boss mostrando interface com resultados de jogos da NFL' : 'Redzone Boss game preview showing NFL game results interface'}
+            alt={
+              detectedLang === 'pt-BR'
+                ? 'Preview do jogo Redzone Boss mostrando interface com resultados de jogos da NFL'
+                : 'Redzone Boss game preview showing NFL game results interface'
+            }
             width={1200}
             height={800}
             className="w-full h-auto object-contain"
@@ -40,7 +51,7 @@ export async function LandingHero() {
         <div className="mt-4 p-3 rounded-lg bg-muted/50 border border-border">
           <p className="text-xs text-muted-foreground text-center">
             <span className="font-semibold">*</span>{' '}
-            {lang === 'pt-BR'
+            {detectedLang === 'pt-BR'
               ? 'Imagem meramente ilustrativa - Interface inspirada pelo Brasfoot/Elifoo, criada pela National Curiosity League'
               : 'Illustrative image only - Interface inspired by Brasfoot/Elifoot, created by National Curiosity League'}
           </p>
@@ -59,14 +70,14 @@ export async function LandingHero() {
           <p className="text-muted-foreground mb-4">{t.joinUsText}</p>
           <div className="mt-4 pt-4 border-t border-border">
             <p className="text-sm text-muted-foreground mb-2">
-              {lang === 'pt-BR' ? 'Entre em contato:' : 'Get in touch:'}
+              {detectedLang === 'pt-BR' ? 'Entre em contato:' : 'Get in touch:'}
             </p>
-            <Link
-              href="mailto:redzonebossgame@gmail.com"
+            <WrapperLink
+              href={`mailto:${SITE_CONFIG.email}`}
               className="text-red-600 dark:text-red-400 hover:underline font-medium"
             >
-              redzonebossgame@gmail.com
-            </Link>
+              {SITE_CONFIG.email}
+            </WrapperLink>
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { signupSchema } from '@/lib/validations';
 import { checkRateLimit, getClientIdentifier } from '@/lib/rate-limit';
 import { createApiClient } from '@/lib/supabase/api';
+import { signupSchema } from '@/lib/validations';
 
 export async function POST(request: NextRequest) {
   try {
@@ -109,7 +109,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('New signup saved:', { id: signupData.id, email, name, timestamp: new Date().toISOString() });
+    console.log('New signup saved:', {
+      id: signupData.id,
+      email,
+      name,
+      timestamp: new Date().toISOString(),
+    });
 
     return NextResponse.json(
       {

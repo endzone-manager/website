@@ -1,15 +1,13 @@
-import type { Metadata } from "next";
-import { Geist } from "next/font/google";
-import { ThemeProvider } from "next-themes";
-import { PostHogProvider, PostHogPageView } from "@/components/PostHogProvider";
-import { StructuredData } from "@/components/StructuredData";
-import { Suspense } from "react";
-import { SITE_CONFIG } from "@/lib/constants";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Geist } from 'next/font/google';
+import { ThemeProvider } from 'next-themes';
+import { Suspense } from 'react';
+import { PostHogPageView, PostHogProvider } from '@/components/PostHogProvider';
+import { StructuredData } from '@/components/StructuredData';
+import { SITE_CONFIG } from '@/lib/constants';
+import './globals.css';
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : SITE_CONFIG.url;
+const defaultUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : SITE_CONFIG.url;
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
@@ -49,7 +47,7 @@ export const metadata: Metadata = {
     'contact:email': SITE_CONFIG.email,
   },
   verification: {
-    google: "5uw1hL7d3BfsjE7ev_iSDfVbv9k9ZxHiB8NZynsWY14",
+    google: '5uw1hL7d3BfsjE7ev_iSDfVbv9k9ZxHiB8NZynsWY14',
   },
   robots: {
     index: true,
@@ -65,9 +63,9 @@ export const metadata: Metadata = {
 };
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  display: "swap",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  display: 'swap',
+  subsets: ['latin'],
 });
 
 export default function RootLayout({
@@ -79,19 +77,19 @@ export default function RootLayout({
     <html lang="pt-BR" suppressHydrationWarning>
       <body className={`${geistSans.className} antialiased`}>
         <StructuredData />
-        <PostHogProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <PostHogProvider>
             <Suspense>
               <PostHogPageView />
             </Suspense>
             {children}
-          </ThemeProvider>
-        </PostHogProvider>
+          </PostHogProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

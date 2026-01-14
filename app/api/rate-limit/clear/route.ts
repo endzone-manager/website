@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { clearRateLimitStore, clearRateLimitForIdentifier } from '@/lib/rate-limit';
+import { clearRateLimitForIdentifier, clearRateLimitStore } from '@/lib/rate-limit';
 
 // Only allow in development
 export async function POST(request: Request) {
@@ -29,9 +29,6 @@ export async function POST(request: Request) {
     }
   } catch (error) {
     console.error('Error clearing rate limit:', error);
-    return NextResponse.json(
-      { error: 'Failed to clear rate limit' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to clear rate limit' }, { status: 500 });
   }
 }

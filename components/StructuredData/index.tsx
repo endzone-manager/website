@@ -8,9 +8,7 @@ export function StructuredData() {
     name: SITE_CONFIG.name,
     url: SITE_CONFIG.url,
     email: SITE_CONFIG.email,
-    sameAs: [
-      SITE_CONFIG.instagram,
-    ],
+    sameAs: [SITE_CONFIG.instagram],
     contactPoint: {
       '@type': 'ContactPoint',
       email: SITE_CONFIG.email,

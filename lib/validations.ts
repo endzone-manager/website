@@ -27,10 +27,7 @@ export function createSignupSchema(lang: 'pt-BR' | 'en-US' = 'en-US') {
       .min(2, t.nameMin)
       .max(100, t.nameMax)
       .regex(/^[a-zA-ZÀ-ÿ\s]+$/, t.nameRegex),
-    email: z
-      .string()
-      .email(t.emailInvalid)
-      .max(255, t.emailMax),
+    email: z.string().email(t.emailInvalid).max(255, t.emailMax),
     // Honey pot field - should be empty (bots will fill this)
     // We validate this on the server side, not in the schema
     website: z.string().optional(),

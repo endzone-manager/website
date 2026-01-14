@@ -1,16 +1,26 @@
 import { headers } from 'next/headers';
-import { detectLanguageFromHeaders, getTranslations } from '@/lib/i18n';
 import { SITE_CONFIG } from '@/lib/constants';
+import { detectLanguageFromHeaders, getTranslations, type Language } from '@/lib/i18n';
+import { WrapperLink } from '../WrapperLink';
 
-export async function Footer() {
-  const headersList = await headers();
-  const lang = detectLanguageFromHeaders(headersList);
-  const t = getTranslations(lang);
+interface FooterProps {
+  lang?: Language;
+}
+
+export async function Footer({ lang }: FooterProps = {}) {
+  // If lang is not provided, detect it from headers
+  let detectedLang = lang;
+  if (!detectedLang) {
+    const headersList = await headers();
+    detectedLang = detectLanguageFromHeaders(headersList);
+  }
+  const t = getTranslations(detectedLang);
   const currentYear = new Date().getFullYear();
 
-  const copyrightText = lang === 'pt-BR'
-    ? `© ${currentYear} Redzone Boss. Todos os direitos reservados.`
-    : `© ${currentYear} Redzone Boss. All rights reserved.`;
+  const copyrightText =
+    detectedLang === 'pt-BR'
+      ? `© ${currentYear} ${SITE_CONFIG.name}. Todos os direitos reservados.`
+      : `© ${currentYear} ${SITE_CONFIG.name}. All rights reserved.`;
 
   return (
     <footer className="w-full border-t mt-auto py-8">
@@ -18,21 +28,14 @@ export async function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <p>{copyrightText}</p>
           <div className="flex items-center gap-4">
-            <a
+            <WrapperLink
               href={`mailto:${SITE_CONFIG.email}`}
               className="hover:underline hover:text-foreground transition-colors"
             >
               {SITE_CONFIG.email}
-            </a>
+            </WrapperLink>
             <span className="hidden md:inline">•</span>
-            <a
-              href={SITE_CONFIG.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:underline hover:text-foreground transition-colors"
-            >
-              {t.instagram}
-            </a>
+            <WrapperLink href={SITE_CONFIG.instagram}>{t.instagram}</WrapperLink>
           </div>
         </div>
       </div>

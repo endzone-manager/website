@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { usePostHog } from 'posthog-js/react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -149,15 +149,13 @@ export function SignupForm({ lang }: SignupFormProps) {
                     : 'Get the latest news about Redzone Boss development'}
                 </p>
                 <div className="flex items-center justify-center gap-2 mt-6 text-sm text-muted-foreground">
-                  <svg
-                    className="w-5 h-5 text-red-500"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
                   </svg>
                   <span>
-                    {lang === 'pt-BR' ? 'Sem spam, apenas conteúdo relevante' : 'No spam, just relevant content'}
+                    {lang === 'pt-BR'
+                      ? 'Sem spam, apenas conteúdo relevante'
+                      : 'No spam, just relevant content'}
                   </span>
                 </div>
               </div>
@@ -167,9 +165,7 @@ export function SignupForm({ lang }: SignupFormProps) {
           {/* Form Section */}
           <div className="p-8 md:p-12">
             <div className="mb-6">
-              <h3 className="text-2xl md:text-3xl font-bold mb-2">
-                {t.signUpText}
-              </h3>
+              <h3 className="text-2xl md:text-3xl font-bold mb-2">{t.signUpText}</h3>
               <p className="text-muted-foreground text-sm">
                 {lang === 'pt-BR'
                   ? 'Cadastre-se para receber atualizações exclusivas'
@@ -179,7 +175,10 @@ export function SignupForm({ lang }: SignupFormProps) {
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
               {/* Honey pot field - hidden from users but visible to bots */}
-              <div className="absolute left-[-9999px] opacity-0 pointer-events-none" aria-hidden="true">
+              <div
+                className="absolute left-[-9999px] opacity-0 pointer-events-none"
+                aria-hidden="true"
+              >
                 <Label htmlFor="website">Website</Label>
                 <Input
                   id="website"
@@ -203,9 +202,7 @@ export function SignupForm({ lang }: SignupFormProps) {
                   {...register('name')}
                 />
                 {errors.name && (
-                  <p className="text-sm text-red-600 dark:text-red-400">
-                    {errors.name.message}
-                  </p>
+                  <p className="text-sm text-red-600 dark:text-red-400">{errors.name.message}</p>
                 )}
               </div>
 
@@ -222,9 +219,7 @@ export function SignupForm({ lang }: SignupFormProps) {
                   {...register('email')}
                 />
                 {errors.email && (
-                  <p className="text-sm text-red-600 dark:text-red-400">
-                    {errors.email.message}
-                  </p>
+                  <p className="text-sm text-red-600 dark:text-red-400">{errors.email.message}</p>
                 )}
               </div>
 
@@ -242,9 +237,7 @@ export function SignupForm({ lang }: SignupFormProps) {
                 className="w-full bg-red-600 hover:bg-red-700 text-white h-12 text-base font-semibold shadow-lg hover:shadow-xl transition-all"
                 disabled={isSubmitting}
               >
-                {isSubmitting
-                  ? (lang === 'pt-BR' ? 'Cadastrando...' : 'Signing up...')
-                  : t.signUp}
+                {isSubmitting ? (lang === 'pt-BR' ? 'Cadastrando...' : 'Signing up...') : t.signUp}
               </Button>
 
               <p className="text-xs text-center text-muted-foreground pt-2">

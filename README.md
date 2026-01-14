@@ -17,15 +17,15 @@ Este é um site simples de landing page desenvolvido com Next.js para promover o
 
 1. Instale as dependências:
 
-```bash
+   ```bash
 npm install
 ```
 
 2. Execute o servidor de desenvolvimento:
 
-```bash
-npm run dev
-```
+   ```bash
+   npm run dev
+   ```
 
 3. Acesse [http://localhost:3000](http://localhost:3000)
 
