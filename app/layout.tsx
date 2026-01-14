@@ -5,6 +5,8 @@ import { Suspense } from 'react';
 import { PostHogPageView, PostHogProvider } from '@/components/PostHogProvider';
 import { StructuredData } from '@/components/StructuredData';
 import { SITE_CONFIG } from '@/lib/constants';
+import { GoogleTagManager } from '@next/third-parties/google';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import './globals.css';
 
 const defaultUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : SITE_CONFIG.url;
@@ -68,6 +70,12 @@ const geistSans = Geist({
   subsets: ['latin'],
 });
 
+const IS_PRODUCTION =
+  process.env.NEXT_PUBLIC_VERCEL_ENV === 'production' ||
+  (process.env.NODE_ENV === 'production' && !process.env.NEXT_PUBLIC_VERCEL_ENV);
+const GTMID = process.env.NEXT_PUBLIC_GTM_ID;
+const GA_TRACKINGID = process.env.NEXT_PUBLIC_GA_TRACKINGID;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -75,7 +83,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
+      {IS_PRODUCTION && !!GA_TRACKINGID && <GoogleAnalytics gaId={GA_TRACKINGID} />}
+      {IS_PRODUCTION && !!GTMID && <GoogleTagManager gtmId={GTMID} />}
       <body className={`${geistSans.className} antialiased`}>
+        {IS_PRODUCTION && !!GTMID && (
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${GTMID}`}
+              height="0"
+              width="0"
+              style={{ display: 'none', visibility: 'hidden' }}
+            />
+          </noscript>
+        )}
         <StructuredData />
         <ThemeProvider
           attribute="class"
