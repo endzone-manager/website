@@ -2,7 +2,7 @@
 export const SITE_CONFIG = {
   name: 'Redzone Boss',
   email: 'redzonebossgame@gmail.com',
-  instagram: 'https://instagram.com/redzoneboss',
+  instagram: 'https://www.instagram.com/redzoneboss.game/',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://redzonebossgame.com',
   description: {
     'pt-BR':
